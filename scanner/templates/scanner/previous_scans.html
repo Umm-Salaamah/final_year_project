@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Previous Scans</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Previous Scans</h1>
+        <ul class="list-group">
+            {% for scan in scans %}
+                <li class="list-group-item">
+                    <a href="{% url 'scan_results' %}">{{ scan.url }}</a> - Scanned at {{ scan.scanned_at }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
