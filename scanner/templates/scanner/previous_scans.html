@@ -11,7 +11,7 @@
         <ul class="list-group">
             {% for scan in scans %}
                 <li class="list-group-item">
-                    <a href="{% url 'scan_results' %}">{{ scan.url }}</a> - Scanned at {{ scan.scanned_at }}
+                    <a href="{% url 'scan_results' scan.id %}">{{ scan.url }}</a> - Scanned at {{ scan.scanned_at }}
                 </li>
             {% endfor %}
         </ul>

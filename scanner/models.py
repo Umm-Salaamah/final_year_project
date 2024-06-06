@@ -8,13 +8,13 @@ class User(AbstractUser):
 
 #for the user to have access to previous scans
 
-class Scans(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='scan_history')
-    url = models.URLField(max_length=200)
-    result = models.TextField()
+class ScanResult(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    url = models.URLField()
+    results = models.JSONField()
     scanned_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Scan for {self.url} by {self.user.username}'
+        return f'{self.url} scanned at {self.scanned_at}'
 
 # Create your models here.
