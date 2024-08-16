@@ -31,6 +31,19 @@
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'index' %}">Vulnerability Scanner</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'previous_scans' %}">Previous Scans</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'schedule_scan' %}">Schedule a Scan</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6 form-container">
@@ -42,6 +55,7 @@
                         <input type="text" class="form-control" id="url" name="url" placeholder="https://example.com" required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Scan</button>
+                    <a class="nav-link" href="{% url 'previous_scans' %}">Previous Scans</a>
                 </form>
             </div>
         </div>

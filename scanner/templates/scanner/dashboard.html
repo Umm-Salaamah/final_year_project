@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="text-center">Dashboard</h2>
+
+                <h3>Your Previous Scans</h3>
+                <ul class="list-group">
+                    {% for scan in scan_results %}
+                        <li class="list-group-item">
+                            <strong>URL:</strong> {{ scan.url }}<br>
+                            <strong>Results:</strong> {{ scan.results }}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <h3>Scheduled Scans</h3>
+                <ul class="list-group">
+                    {% for scheduled in scheduled_scans %}
+                        <li class="list-group-item">
+                            <strong>URL:</strong> {{ scheduled.url }}<br>
+                            <strong>Interval (hours):</strong> {{ scheduled.interval }}<br>
+                            <strong>Next Run:</strong> {{ scheduled.next_run }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+                <a href="{% url 'index' %}" class="btn btn-primary mt-3">Go to Scanner</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -8,6 +8,31 @@ from .forms import URLForm
 from .utils.header_scanner import scan_headers
 from .models import ScanResult, User
 from django.views.decorators.csrf import csrf_exempt
+from .models import ScheduledScan
+from .forms import ScheduledScanForm
+from django.utils import timezone
+# from django.core.mail import send_mail
+# from django.conf import settings
+# from datetime import timedelta
+
+@login_required
+def schedule_scan(request):
+    if request.method == 'POST':
+        form = ScheduledScanForm(request.POST)
+        if form.is_valid():
+            scheduled_scan = form.save(commit=False)
+            scheduled_scan.user = request.user
+            scheduled_scan.next_run = timezone.now() + timezone.timedelta(hours=scheduled_scan.interval)
+            scheduled_scan.save()
+            return redirect('dashboard')
+    else:
+        form = ScheduledScanForm()
+    return render(request, 'scanner/schedule_scan.html', {'form': form})
+
+@login_required
+def view_scheduled_scans(request):
+    scans = ScheduledScan.objects.filter(user=request.user)
+    return render(request, 'scanner/view_scheduled_scans.html', {'scans': scans})
 
 @csrf_exempt
 @login_required
@@ -86,3 +111,11 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "scanner/register.html")
+def dashboard(request):
+    # Fetch the user's scan results and scheduled scans
+    #scan_results = ScanResult.objects.filter(user=request.user)
+    scheduled_scans = ScheduledScan.objects.filter(user=request.user)
+    return render(request, 'scanner/dashboard.html', {
+        'scan_results': scan_results,
+        'scheduled_scans': scheduled_scans
+    })

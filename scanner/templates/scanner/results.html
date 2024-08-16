@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,9 +11,9 @@
         .container {
             margin-top: 50px;
         }
-        .results-container {
-            background-color: #ffffff;
+        .carousel-item {
             padding: 30px;
+            background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -23,34 +23,227 @@
         .header-missing {
             color: red;
         }
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: blue; /* Change control background color to blue */
+            border-radius: 50%;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'index' %}">Vulnerability Scanner</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'previous_scans' %}">Previous Scans</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'schedule_scan' %}">Schedule a Scan</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 results-container">
+            <div class="col-md-8">
                 <h2 class="text-center">Scan Results for {{ url }}</h2>
-                <ul class="list-group">
-                    {% for header, info in results.items %}
-                        <li class="list-group-item">
-                            <strong>{{ header }}:</strong> 
-                            <span class="{% if info.status == 'Present' %}header-present{% else %}header-missing{% endif %}">
-                                {{ info.status }}
-                            </span>
-                            {% if info.status == 'Missing' %}
-                                <br>{{ info.suggestion.definition }}
-                                <br><strong>Fix Steps:</strong>
-                                <ol>
-                                    {% for step in info.suggestion.fix_steps %}
-                                        <li>{{ step }}</li>
-                                    {% endfor %}
-                                </ol>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
+                <div id="resultsCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for header, info in results.items %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <div class="list-group-item">
+                                <strong>{{ header }}:</strong> 
+                                <span class="{% if info.status == 'Present' %}header-present{% else %}header-missing{% endif %}">
+                                    {{ info.status }}
+                                </span>
+                                {% if info.status == 'Missing' %}
+                                    <br>{{ info.suggestion.definition }}
+                                    <br><strong>Fix Steps:</strong>
+                                    <ol>
+                                        {% for step in info.suggestion.fix_steps %}
+                                            <li>{{ step }}</li>
+                                        {% endfor %}
+                                    </ol>
+                                {% endif %}
+                            </div>
+                            <div class="text-center mt-3">
+                                {{ forloop.counter }} out of 7
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#resultsCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#resultsCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
                 <a href="{% url 'index' %}" class="btn btn-primary btn-block mt-3">Scan another URL</a>
-                <a class="nav-link" href="{% url 'previous_scans' %}">Previous Scans</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+ -->
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan Results</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .carousel-item {
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header-present {
+            color: green;
+        }
+        .header-missing {
+            color: red;
+        }
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: blue; /* Change control background color to blue */
+            border-radius: 50%;
+            padding: 10px;
+        }
+        .code-snippet {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'index' %}">Vulnerability Scanner</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'previous_scans' %}">Previous Scans</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'schedule_scan' %}">Schedule a Scan</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="text-center">Scan Results for {{ url }}</h2>
+                <div id="resultsCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for header, info in results.items %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <div class="list-group-item">
+                                <strong>{{ header }}:</strong> 
+                                <span class="{% if info.status == 'Present' %}header-present{% else %}header-missing{% endif %}">
+                                    {{ info.status }}
+                                </span>
+                                <!-- {% if info.status == 'Missing' %}
+                                    <br>{{ info.suggestion.definition }}
+                                    <br><strong>Fix Steps:</strong>
+                                    <ol>
+                                        {% for step in info.suggestion.fix_steps %}
+                                            <li>{{ step }}</li>
+                                        {% endfor %}
+                                    </ol>
+                                    <br><strong>Code Snippet:</strong>
+                                    <pre class="code-snippet">{{ info.suggestion.code_snippet }}</pre>
+                                    <br><strong>Further Reading:</strong>
+                                    <ul>
+                                        {% for link in info.suggestion.further_reading %}
+                                            <li><a href="{{ link.url }}" target="_blank">{{ link.title }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %} -->
+                                {% if info.status == 'Missing' %}
+    <br>{{ info.suggestion.definition }}
+    <br><strong>Fix Steps:</strong>
+    <ol>
+        {% for step in info.suggestion.fix_steps %}
+            <li>{{ step }}</li>
+        {% endfor %}
+    </ol>
+    <br><strong>Code Snippets:</strong>
+    <div class="code-snippet-box">
+        <h3 class="code-snippet-title">python</h3>
+        <div class="code-snippet">{{ info.suggestion.code_snippet.python }}</div>
+    </div>
+    <br>
+    <div class="code-snippet-box">
+        <h3 class="code-snippet-title">Node.js</h3>
+        <div class="code-snippet">{{ info.suggestion.code_snippet.node }}</div>
+    </div>
+    <br>
+    <div class="code-snippet-box">
+        <h3 class="code-snippet-title">Java</h3>
+        <div class="code-snippet">{{ info.suggestion.code_snippet.java }}</div>
+    </div>
+    <br>
+    <div class="code-snippet-box">
+        <h3 class="code-snippet-title">PHP</h3>
+        <div class="code-snippet">{{ info.suggestion.code_snippet.php }}</div>
+    </div>
+    <br>
+    <div class="code-snippet-box">
+        <h3 class="code-snippet-title">ASP.NET</h3>
+        <div class="code-snippet">{{ info.suggestion.code_snippet.aspnet }}</div>
+    </div>
+    <br>
+    <div class="code-snippet-box">
+        <h3 class="code-snippet-title">Ruby</h3>
+        <div class="code-snippet">{{ info.suggestion.code_snippet.ruby }}</div>
+    </div>
+    <br><strong>Further Reading:</strong>
+    <ul>
+        {% for link in info.suggestion.further_reading %}
+            <li><a href="{{ link.url }}" target="_blank">{{ link.title }}</a></li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+                            </div>
+                            <div class="text-center mt-3">
+                                {{ forloop.counter }} out of 7
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#resultsCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#resultsCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                <a href="{% url 'index' %}" class="btn btn-primary btn-block mt-3">Scan another URL</a>
             </div>
         </div>
     </div>

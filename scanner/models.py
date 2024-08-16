@@ -16,5 +16,15 @@ class ScanResult(models.Model):
 
     def __str__(self):
         return f'{self.url} scanned at {self.scanned_at}'
+    
+class ScheduledScan(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    url = models.URLField()
+    interval = models.PositiveIntegerField(help_text="Interval in hours")
+    next_run = models.DateTimeField()
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.url} (every {self.interval} hours)"
 
 # Create your models here.

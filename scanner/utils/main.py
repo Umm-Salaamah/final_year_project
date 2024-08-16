@@ -2,7 +2,7 @@ import headers
 import header_scanner
 
 def main():
-    # Specify the URLs you want to scan for clickjacking vulnerabilities
+    # Specify the URLs you want to scan for website header compliance
     urls = ['http://www.example.com', 'http://www.google.com']
 
     for url in urls:

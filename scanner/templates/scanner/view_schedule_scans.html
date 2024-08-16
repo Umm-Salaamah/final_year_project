@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scheduled Scans</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2>Your Scheduled Scans</h2>
+                <ul class="list-group">
+                    {% for scan in scans %}
+                        <li class="list-group-item">
+                            URL: {{ scan.url }} <br>
+                            Interval: {{ scan.interval }} hours <br>
+                            Next Run: {{ scan.next_run }} <br>
+                            Active: {{ scan.active }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
